@@ -1,3 +1,6 @@
 <resources>
+
     <string name="app_name">MovieStage1</string>
+
+    <string name="message_error_no_internet_connection">Please, connect your device to the internet to load data</string>
 </resources>
