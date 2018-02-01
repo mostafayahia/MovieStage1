@@ -18,10 +18,16 @@ import tutorial.elmasry.moviestage1.model.MovieInfo;
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapterViewHolder> {
 
     private MovieInfo[] mMovieInfoArray;
-    private Context mContext;
+    private final Context mContext;
+    private final MovieAdapterOnClickHandler mClickHandler;
 
-    public MovieAdapter(Context context) {
+    public interface MovieAdapterOnClickHandler {
+        void clickHandler(MovieInfo movieInfo);
+    }
+
+    public MovieAdapter(Context context, MovieAdapterOnClickHandler clickHandler) {
         mContext = context;
+        mClickHandler = clickHandler;
     }
 
     @Override
@@ -45,15 +51,20 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
         else                         return mMovieInfoArray.length;
     }
 
-    public class MovieAdapterViewHolder extends RecyclerView.ViewHolder {
+    public class MovieAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public final ImageView mPosterView;
 
         public MovieAdapterViewHolder(View itemView) {
             super(itemView);
-            mPosterView = itemView.findViewById(R.id.iv_poster);
+            mPosterView = itemView.findViewById(R.id.detail_iv_poster);
+            itemView.setOnClickListener(this);
         }
 
+        @Override
+        public void onClick(View v) {
+            mClickHandler.clickHandler(mMovieInfoArray[getAdapterPosition()]);
+        }
     }
 
     public void setMovieInfoArray(MovieInfo[] mMovieInfoArray) {

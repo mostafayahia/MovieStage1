@@ -98,7 +98,7 @@ public class MovieInfo implements Parcelable {
 
     }
 
-    public final Parcelable.Creator CREATOR = new Creator<MovieInfo>() {
+    public static final Parcelable.Creator CREATOR = new Creator<MovieInfo>() {
         @Override
         public MovieInfo createFromParcel(Parcel source) {
             return new MovieInfo(source);

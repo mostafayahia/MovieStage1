@@ -3,4 +3,19 @@
     <string name="app_name">MovieStage1</string>
 
     <string name="message_error_no_internet_connection">Please, connect your device to the internet to load data</string>
+
+    <string name="detail_label_title">Title: </string>
+    <string name="detail_label_plot_synopsis">Plot Synopsis: </string>
+    <string name="detail_label_user_rating">User Rating: </string>
+    <string name="detail_label_release_date">Release Date: </string>
+
+    <string name="message_failing_to_get_movie_detail">Failing to get movie detail</string>
+
+    <string name="action_popular_movies">Popular Movies</string>
+    <string name="action_top_rated_movies">Top Rated Movies</string>
+
+    <string name="label_detail_activity">Detail Activity</string>
+
+    <string name="content_description_poster">poster image</string>
+
 </resources>

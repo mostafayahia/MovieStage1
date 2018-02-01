@@ -8,4 +8,16 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="MovieInfoLabelStyle">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:layout_marginTop">16dp</item>
+    </style>
+
+    <style name="MovieInfoStyle" parent="@style/MovieInfoLabelStyle">
+        <item name="android:textStyle">normal</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:layout_marginLeft">8dp</item>
+    </style>
+
 </resources>

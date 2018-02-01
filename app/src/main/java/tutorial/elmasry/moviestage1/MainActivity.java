@@ -1,11 +1,14 @@
 package tutorial.elmasry.moviestage1;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -19,9 +22,12 @@ import tutorial.elmasry.moviestage1.utilities.HelperUtils;
 import tutorial.elmasry.moviestage1.utilities.NetworkUtils;
 import tutorial.elmasry.moviestage1.utilities.TheMovieDBJsonUtils;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
+
+    private static final String MOVIE_INFO_ARRAY_KEY = "movie-info-array";
+
     private MovieInfo[] mMovieInfoArray;
     private MovieAdapter mMovieAdapter;
     private RecyclerView mRecyclerView;
@@ -36,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         mLoadingIndicator = findViewById(R.id.pb_loading_indicator);
         mErrorNoConnectionTv = findViewById(R.id.tv_error_no_connection);
 
-        mMovieAdapter = new MovieAdapter(this);
+        mMovieAdapter = new MovieAdapter(this, this);
 
         mRecyclerView = findViewById(R.id.rv_poster);
 
@@ -49,17 +55,67 @@ public class MainActivity extends AppCompatActivity {
 
         mRecyclerView.setAdapter(mMovieAdapter);
 
-        loadMoviesData();
+        if (null != savedInstanceState && savedInstanceState.containsKey(MOVIE_INFO_ARRAY_KEY)) {
+            mMovieInfoArray = (MovieInfo[]) savedInstanceState.getParcelableArray(MOVIE_INFO_ARRAY_KEY);
+            mMovieAdapter.setMovieInfoArray(mMovieInfoArray);
+        } else {
+            loadMoviesData(NetworkUtils.SORT_POPULAR);
+        }
     }
 
-    private void loadMoviesData() {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.movie, menu);
+        return true;
+
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+
+        super.onSaveInstanceState(outState);
+        if (mMovieInfoArray != null)
+            outState.putParcelableArray(MOVIE_INFO_ARRAY_KEY, mMovieInfoArray);
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int itemId = item.getItemId();
+
+        switch (itemId) {
+            case R.id.action_popular_movies:
+                loadMoviesData(NetworkUtils.SORT_POPULAR);
+                return true;
+            case R.id.action_top_rated_movies:
+                loadMoviesData(NetworkUtils.SORT_TOP_RATED);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void loadMoviesData(int sortBy) {
 
         if (HelperUtils.isDeviceOnline(this)) {
             hideErrorNoConnectionView();
-            new FetchMovieInfo().execute(NetworkUtils.SORT_POPULAR);
+            // getting rid of old grid view if exist
+            mMovieAdapter.setMovieInfoArray(null);
+            new FetchMovieInfo().execute(sortBy);
         } else {
             showErrorNoConnectionView();
         }
+
+    }
+
+    @Override
+    public void clickHandler(MovieInfo movieInfo) {
+
+        Intent detailIntent = new Intent(this, DetailActivity.class);
+        detailIntent.putExtra(DetailActivity.EXTRA_MOVIE_INFO, movieInfo);
+        startActivity(detailIntent);
 
     }
 
