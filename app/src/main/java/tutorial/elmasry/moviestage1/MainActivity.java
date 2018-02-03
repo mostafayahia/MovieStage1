@@ -149,7 +149,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         @Override
         protected void onPostExecute(String jsonResponse) {
+
             mLoadingIndicator.setVisibility(View.INVISIBLE);
+
+            if (null == jsonResponse) return;
+
             try {
                 mMovieInfoArray = TheMovieDBJsonUtils.getMovieInfoArrayFromJson(jsonResponse);
                 mMovieAdapter.setMovieInfoArray(mMovieInfoArray);

@@ -40,8 +40,13 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
     @Override
     public void onBindViewHolder(MovieAdapterViewHolder holder, int position) {
 
+        String posterUrl = mMovieInfoArray[position].getPosterUrl();
+
+        if (posterUrl == null || posterUrl.length() == 0)
+            throw new RuntimeException("poster url can't be null or empty");
+
         Picasso.with(mContext)
-                .load(mMovieInfoArray[position].getPosterUrl())
+                .load(posterUrl)
                 .into(holder.mPosterView);
     }
 

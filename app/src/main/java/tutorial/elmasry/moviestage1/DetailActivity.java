@@ -38,8 +38,13 @@ public class DetailActivity extends AppCompatActivity {
 
         ImageView posterView = findViewById(R.id.detail_iv_poster);
 
+        String posterUrl = movieInfo.getPosterUrl();
+
+        if (posterUrl == null || posterUrl.length() == 0)
+            throw new RuntimeException("poster url can't be null or empty");
+
         Picasso.with(this)
-                .load(movieInfo.getPosterUrl())
+                .load(posterUrl)
                 .into(posterView);
 
     }
